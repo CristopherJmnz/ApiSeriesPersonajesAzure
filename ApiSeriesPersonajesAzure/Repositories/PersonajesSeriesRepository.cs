@@ -28,23 +28,24 @@ namespace ApiSeriesPersonajesAzure.Repositories
         public async Task<List<PersonajesSeries>>
             GetPersonajesBySerieAsync(string serie)
         {
-            return await this.context.PersonajesSeries
-                .Where(x=>x.Serie==serie).ToListAsync();
-        } 
+            List<PersonajesSeries> personajes = await this.context.PersonajesSeries
+                .Where(x => x.Serie == serie).ToListAsync();
+            return personajes.Count == 0 ? null : personajes;
+        }
 
         public async Task<List<string>> GetSeriesAsync()
         {
-            var query=from datos in this.context.PersonajesSeries
-                      select datos.Serie;
+            var query = from datos in this.context.PersonajesSeries
+                        select datos.Serie;
             return await query.ToListAsync();
         }
 
-        private async Task<int>GetMaxIdPersonaje()
+        private async Task<int> GetMaxIdPersonaje()
         {
             return await this.context.PersonajesSeries
-                .MaxAsync(x => x.IdPersonaje)+1;
+                .MaxAsync(x => x.IdPersonaje) + 1;
         }
-        public async Task InsertPersonajeAsync(string nombre,string imagen,string serie)
+        public async Task InsertPersonajeAsync(string nombre, string imagen, string serie)
         {
             PersonajesSeries personaje = new PersonajesSeries()
             {
@@ -61,8 +62,8 @@ namespace ApiSeriesPersonajesAzure.Repositories
         {
             PersonajesSeries personaje = await this.FindPersonajeAsync(idpersonaje);
             personaje.Serie = serie;
-            personaje.Nombre=nombre;
-            personaje.Imagen= imagen;
+            personaje.Nombre = nombre;
+            personaje.Imagen = imagen;
             await this.context.SaveChangesAsync();
         }
 

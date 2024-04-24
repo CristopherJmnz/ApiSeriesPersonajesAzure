@@ -57,7 +57,7 @@ namespace ApiSeriesPersonajesAzure.Controllers
             return Ok();
         }
 
-        [HttpDelete("[action]")]
+        [HttpDelete("[action]/{id}")]
         public async Task<ActionResult<PersonajesSeries>> DeletePersonaje(int id)
         {
             await this.repo.DeletePersonajeAsync(id);
